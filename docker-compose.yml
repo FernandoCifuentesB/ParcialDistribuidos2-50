@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "8081:80"
+      - "8080:8080" 
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  api:
+    image: nginx
+    labels:
+      - "traefik.http.routers.pikachu.rule=Host(`pikachu.localhost`)"
+      - "traefik.http.services.pikachu.loadbalancer.server.port=80"
+
+  db:
+    image: neo4j:5
+    environment:
+      - NEO4J_AUTH=neo4j/test123
+    labels:
+      - "traefik.http.routers.charizard.rule=Host(`charizard.localhost`)"
+      - "traefik.http.services.charizard.loadbalancer.server.port=7474"
+
+  frontend:
+    image: containous/whoami
+    labels:
+      - "traefik.http.routers.squirtle.rule=Host(`squirtle.localhost`)"
+      - "traefik.http.services.squirtle.loadbalancer.server.port=80"
+
