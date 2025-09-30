@@ -8,31 +8,36 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
     ports:
-      - "8081:80"
-      - "8080:8080"
+      - "8081:80"     
+      - "8080:8080"   
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  api1:
+  api:
     image: nginx
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host('pikachu.localhost') && PathPrefix(/)"
-      - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.services.api.loadbalancer.server.port=80"
+      - "traefik.http.routers.pikachu.rule=Host(`pikachu.localhost`)"
+      - "traefik.http.services.pikachu.loadbalancer.server.port=80"
 
-  api2:
-    image: nginx
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.api.loadbalancer.server.port=80"
+      - "traefik.http.routers.pikachu.middlewares=api-ratelimit"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.average=5"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.burst=10"
 
-  api-legendario:
-    image: nginx
+  db:
+    image: neo4j:5
+    environment:
+      - NEO4J_AUTH=neo4j/test1234
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.legendario.rule=Host('pikachu.localhost') && PathPrefix('/legendario')"
-      - "traefik.http.routers.legendario.entrypoints=web"
-      - "traefik.http.services.legendario.loadbalancer.server.port=80"
-      - "traefik.http.routers.legendario.middlewares=legendario-logger"
-      - "traefik.http.middlewares.legendario-logger.plugin.traefik-logger.loglevel=INFO"
+      - "traefik.http.routers.charizard.rule=Host(`charizard.localhost`)"
+      - "traefik.http.services.charizard.loadbalancer.server.port=7474"
+
+      - "traefik.http.routers.charizard.middlewares=neo4j-auth"
+
+      - "traefik.http.middlewares.neo4j-auth.basicauth.users=admin:$apr1$lCh2Fbi2$pcYYkkf0PGQ3N8qUltamU/"
+
+  frontend:
+    image: containous/whoami
+    labels:
+      - "traefik.http.routers.squirtle.rule=Host(`squirtle.localhos`)"
+
+      - "traefik.http.services.squirtle.loadbalancer.server.port=80"
