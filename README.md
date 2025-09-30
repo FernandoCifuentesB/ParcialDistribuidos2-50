@@ -20,4 +20,6 @@ En el aeropuerto cada middleware representa un control de seguridad que deben pa
 
 
 ## REFLEXIÓN
-ho
+Nuestro aeropuerto Pokémon de la region de Kanto, refleja transparencia al mostrar claramente qué servicios son públicos administrados por Amarouge,  y cuáles internos que los administra Ceruledge. Rillaboom, y Arcanine se encargan  de la escalabilidad haciendo uso de Traefik el cual  balanceando cargas entre las replicas, y Mr. Mime, se apoya de Growlite, para buscar la meayor  tolerancia a los fallos ya que cubre los servicios cri  ticos que se pueden desplegar en diferentes instancias
+
+
