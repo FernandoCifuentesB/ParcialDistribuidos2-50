@@ -1,3 +1,5 @@
+# PARTICIPANTES
+
 # PRIMER PUNTO
 ![Texto alternativo](0dff623e-294e-41b8-90fb-036d46ac7817.jpg)
 Squirtle
@@ -16,3 +18,6 @@ En el aeropuerto cada middleware representa un control de seguridad que deben pa
 ### RateLimit 
   Es como el torniquete que regula el flujo de pasajeros, permitiendo solo cierto número de personas por minuto para evitar congestión en la puerta de embarque 
 
+
+## REFLEXIÓN
+ho
