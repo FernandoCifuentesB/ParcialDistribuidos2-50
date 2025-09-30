@@ -8,37 +8,26 @@ services:
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
     ports:
-      - "8081:80"     
-      - "8080:8080"   
+      - "8081:80"  
+      - "8080:8080" 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      - "traefik.http.middlewares.neo4j-auth.basicauth.users=admin:$$apr1$lCh2Fbi2$pcYYkkf0PGQ3N8qUltamU/"
 
-  api:
+  prensa:  
     image: nginx
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
     labels:
-      - "traefik.http.routers.pikachu.rule=Host(`pikachu.localhost`)"
-      - "traefik.http.services.pikachu.loadbalancer.server.port=80"
+      - "traefik.http.routers.prensa.rule=Host(prensa.localhost)"
+      - "traefik.http.services.prensa.loadbalancer.server.port=80"
 
-      - "traefik.http.routers.pikachu.middlewares=api-ratelimit"
-      - "traefik.http.middlewares.api-ratelimit.ratelimit.average=5"
-      - "traefik.http.middlewares.api-ratelimit.ratelimit.burst=10"
-
-  db:
+  db:  
     image: neo4j:5
     environment:
-      - NEO4J_AUTH=neo4j/test1234
-    labels:
-      - "traefik.http.routers.charizard.rule=Host(`charizard.localhost`)"
-      - "traefik.http.services.charizard.loadbalancer.server.port=7474"
+      - NEO4J_AUTH=neo4j/test123
+    networks:
+      - internal  
 
-      - "traefik.http.routers.charizard.middlewares=neo4j-auth"
-
-
-  frontend:
-    image: containous/whoami
-    labels:
-      - "traefik.http.routers.squirtle.rule=Host(`squirtle.localhos`)"
-
-      - "traefik.http.services.squirtle.loadbalancer.server.port=80"
+networks:
+  internal:
+    driver: bridge
