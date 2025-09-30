@@ -12,6 +12,8 @@ services:
       - "8080:8080"   
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.middlewares.neo4j-auth.basicauth.users=admin:$$apr1$lCh2Fbi2$pcYYkkf0PGQ3N8qUltamU/"
 
   api:
     image: nginx
@@ -33,7 +35,6 @@ services:
 
       - "traefik.http.routers.charizard.middlewares=neo4j-auth"
 
-      - "traefik.http.middlewares.neo4j-auth.basicauth.users=admin:$apr1$lCh2Fbi2$pcYYkkf0PGQ3N8qUltamU/"
 
   frontend:
     image: containous/whoami
